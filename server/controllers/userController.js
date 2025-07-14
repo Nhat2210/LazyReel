@@ -1,3 +1,4 @@
+import { clerkClient } from "@clerk/express";
 import Movie from "../models/Movie.js";
 
 
@@ -66,9 +67,10 @@ export const updateFavorite = async (req, res) => {
 export const getFavorites = async (req, res) => {
     try {
         const user = await clerkClient.users.getUser(req.auth().userId);
-        const getUser = user.privateMetadata.favorites;
+        const favorites = user.privateMetadata.favorites || [];
 
         const movies = await Movie.find({ _id: { $in: favorites } })
+
         res.json({ success: true, movies });
     } catch (error) {
         console.error(error);

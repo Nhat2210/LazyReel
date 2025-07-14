@@ -109,7 +109,7 @@ export const getShow = async (req, res) => {
             }
             dateTime[date].push(show.showDateTime.toISOString().split('T')[1].slice(0, 5));
         });
-        req.jsonn({ success: true, movie, dateTime });
+        req.json({ success: true, movie, dateTime });
     } catch (error) {
         console.error(error);
         res.json({ success: false, message: error.message });

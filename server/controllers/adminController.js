@@ -1,4 +1,6 @@
-
+import Booking from '../models/Booking.js'
+import Show from '../models/Show.js';
+import User from '../models/User.js';
 
 
 
@@ -14,7 +16,7 @@ export const getDashboardData = async (req, res) => {
 
         const totalUser = await User.countDocuments();
 
-        const dashboardDate = {
+        const dashboardData = {
             totalBookings: bookings.length,
             totalRevenue: bookings.reduce((acc, booking) => acc + booking.amount, 0),
             activeShows,

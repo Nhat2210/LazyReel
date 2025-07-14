@@ -14,11 +14,15 @@ import Dashboard from './pages/admin/Dashboard'
 import ListBookings from './pages/admin/ListBookings'
 import ListShows from './pages/admin/ListShows'
 import AddShows from './pages/admin/AddShows'
+import { SignIn } from '@clerk/clerk-react'
 
+import { useAppContext } from './context/AppContext.jsx'
 
 const App = () => {
 
+  const { user, isAdmin } = useAppContext();
   const isAdminRoute = useLocation().pathname.startsWith('/admin')
+
   return (
     <>
       <Toaster />
@@ -30,7 +34,24 @@ const App = () => {
         <Route path='/movies/:id/:date' element={<SeatLayout />} />
         <Route path='/my-bookings' element={<MyBookings />} />
         <Route path='/favourite' element={<Favourite />} />
-        <Route path='/admin/*' element={<Layout />}>
+        <Route
+          path="/admin/*"
+          element={
+            user ? (
+              isAdmin ? (
+                <Layout />
+              ) : (
+                <div className="min-h-screen flex justify-center items-center">
+                  <p className="text-red-500 font-medium">You are not authorized</p>
+                </div>
+              )
+            ) : (
+              <div className="min-h-screen flex justify-center items-center">
+                <SignIn fallbackRedirectUrl="/admin" />
+              </div>
+            )
+          }
+        >
           <Route index element={<Dashboard />} />
           <Route path='add-shows' element={<AddShows />} />
           <Route path='list-shows' element={<ListShows />} />
